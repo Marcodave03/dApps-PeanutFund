@@ -18,33 +18,33 @@ const App = () => {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <DashboardPage></DashboardPage>
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/bots/:botId"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <BotDetailPage></BotDetailPage>
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/bots"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <BotListPage></BotListPage>
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <ProfilePage></ProfilePage>
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
           <Route path="*" element={<NotFoundPage></NotFoundPage>} />
