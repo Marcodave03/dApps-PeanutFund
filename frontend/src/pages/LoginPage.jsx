@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserProvider, formatEther } from "ethers";
+import { BrowserProvider } from "ethers";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -28,34 +28,44 @@ export default function Login() {
   };
 
   useEffect(() => {
-    const isAuthenticated = document.cookie
+    const isAuthenticatedCookie = document.cookie
       .split("; ")
       .find((row) => row.startsWith("PeanutFundtoken="));
 
-    if (isAuthenticated) {
-      navigate("/chat");
+    if (isAuthenticatedCookie) {
+      navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="flex min-h-screen bg-[#1c223f]">
-      <div className="flex-1 flex flex-col justify-center items-center relative overflow-hidden px-6">
-        <img src="login-image.png" alt="3D Character" className="w-3/5 h-2/4" />
-        <div className="absolute top-24 left-[20%] bg-[#222848] p-4 rounded-md shadow-lg">
-          <h3 className="text-sm text-gray-400">Profit Last Month</h3>
-          <p className="text-xl text-white font-bold">
-            624k
-            <span className="text-green-400 text-sm ml-2">+8.24%</span>
-          </p>
+    <div className="flex min-h-screen">
+      <div
+        className="
+          flex-1 
+          relative 
+          flex 
+          flex-col 
+          justify-center 
+          items-center 
+          overflow-hidden 
+          p-6 
+          bg-gradient-to-br
+          from-[#1c223f]
+          to-[#242b4d]
+        "
+      >
+        <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none bg-[url('https://www.svgrepo.com/show/530666/gene-sequence.svg')] bg-cover bg-no-repeat" />
+
+        <div className="z-10 text-center mb-6">
+          <h2 className="text-3xl font-bold text-white">PeanutFund</h2>
+          <p className="text-gray-200 mt-2">Automate Your Crypto Trading.</p>
         </div>
 
-        <div className="absolute bottom-24 left-[35%] bg-[#222848] p-4 rounded-md shadow-lg">
-          <h3 className="text-sm text-gray-400">Order Last Week</h3>
-          <p className="text-xl text-white font-bold">
-            124k
-            <span className="text-green-400 text-sm ml-2">+12.6%</span>
-          </p>
-        </div>
+        <img
+          src="login-image.png"
+          alt="3D Robot"
+          className="z-10 w-2/3 max-w-[400px] mb-8"
+        />
       </div>
 
       <div className="w-full md:w-[400px] bg-[#252a41] px-8 py-10 flex flex-col justify-center">
@@ -120,31 +130,34 @@ export default function Login() {
             </a>
           </div>
 
-          <div class="flex items-center my-4">
-            <div class="flex-grow border-t border-gray-500"></div>
-            <span class="mx-2 text-white">or</span>
-            <div class="flex-grow border-t border-gray-500"></div>
+          <div className="flex items-center my-4">
+            <div className="flex-grow border-t border-gray-500"></div>
+            <span className="mx-2 text-white">or</span>
+            <div className="flex-grow border-t border-gray-500"></div>
           </div>
 
           <div className="flex items-center justify-center space-x-10 mt-2">
             <div
-              className="hover:scale-x-110 cursor-pointer"
+              className="hover:scale-105 transition-transform cursor-pointer"
               onClick={connectWallet}
             >
               <div className="flex items-center justify-center">
                 <img
                   src="metamask-logo.png"
                   alt="MetaMask"
-                  className="w-10 h-10 hover:scale-125"
+                  className="w-10 h-10"
                 />
               </div>
             </div>
-            <div className="hover:scale-x-110 cursor-pointer" onClick={login}>
+            <div
+              className="hover:scale-105 transition-transform cursor-pointer"
+              onClick={login}
+            >
               <div className="flex items-center justify-center">
                 <img
                   src="dfinity-logo.png"
                   alt="Dfinity"
-                  className="w-10 h-10 hover:scale-125"
+                  className="w-10 h-10"
                 />
               </div>
             </div>
