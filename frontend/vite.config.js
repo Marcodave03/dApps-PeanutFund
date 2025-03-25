@@ -21,8 +21,7 @@ export default defineConfig({
     alias: [
       {
         find: 'declarations',
-        replacement: fileURLToPath(new URL('../src/declarations', import.meta.url)),
-        '@': path.resolve(__dirname, 'src')
+        replacement: fileURLToPath(new URL('../src/declarations', import.meta.url))
       },
       
     ]

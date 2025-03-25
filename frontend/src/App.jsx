@@ -14,15 +14,7 @@ const App = () => {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<LoginPage></LoginPage>} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardPage></DashboardPage>
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/" element={<DashboardPage></DashboardPage>} />
           <Route
             path="/bots/:botId"
             element={
