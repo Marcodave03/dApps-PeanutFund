@@ -49,6 +49,5 @@ export const useAuth = () => {
     setIsAuthenticated(false);
     document.cookie = "PeanutFundtoken=; path=/; max-age=0";
   };
-
   return { isAuthenticated, principal, login, logout };
 };

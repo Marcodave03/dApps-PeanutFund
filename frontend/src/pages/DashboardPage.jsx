@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+// import { backend } from 'declarations/backend';
 import {
   Card,
   CardHeader,
@@ -49,6 +50,15 @@ function Dashboard() {
           Welcome back! Here&apos;s an overview of your portfolio.
         </p>
       </header>
+
+      {/* <div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="name">Enter your name: &nbsp;</label>
+        <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <button type="submit">Click Me!</button>
+      </form>
+      {greeting && <section id="greeting">{greeting}</section>}
+    </div> */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <Card className="bg-[#242A4D] text-slate-200">
