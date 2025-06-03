@@ -1,49 +1,132 @@
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import BotDetailPage from "./pages/BotDetailPage";
-import BotListPage from "./pages/BotListPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import ProfilePage from "./pages/ProfilePage";
+// src/App.jsx
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Navigation from './components/Navigation';
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "/index.css";
-import ProtectedRoute from "./ProtectedRoute";
+// Pages
+import DashboardPage from './pages/DashboardPage';
+import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
+import MarketplacePage from './pages/MarketplacePage';
+import BotDetailPage from './pages/BotDetailPage';
+import BotConfigPage from './pages/BotConfigPage';
+import MyBotsPage from './pages/MyBotsPage';
+import HelpPage from './pages/HelpPage';
+import ProfilePage from './pages/ProfilePage';
+import BotActivitiesPage from './pages/BotActivitiesPage';
 
-const App = () => {
+function Layout({ children }) {
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<DashboardPage></DashboardPage>} />
-          <Route
-            path="/bots/:botId"
-            element={
-              <ProtectedRoute>
-                <BotDetailPage></BotDetailPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/bots"
-            element={
-              <ProtectedRoute>
-                <BotListPage></BotListPage>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <ProfilePage></ProfilePage>
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<NotFoundPage></NotFoundPage>} />
-        </Routes>
-      </Router>
-    </>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <Navigation />
+      <main className="min-h-[calc(100vh-4rem)]">
+        {children}
+      </main>
+    </div>
   );
-};
+}
+
+function ProtectedRoute({ children }) {
+  const { isAuthenticated, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <Layout>{children}</Layout>;
+}
+
+function PublicRoute({ children }) {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  if (isAuthenticated) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+
+  return <Layout>{children}</Layout>;
+}
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          } />
+          
+          <Route path="/help" element={
+            <Layout>
+              <HelpPage />
+            </Layout>
+          } />
+
+          {/* Protected Routes */}
+          <Route path="/" element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/marketplace" element={
+            <ProtectedRoute>
+              <MarketplacePage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/bots/:id" element={
+            <ProtectedRoute>
+              <BotDetailPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/my-bots/activity" element={
+            <ProtectedRoute>
+              <BotActivitiesPage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/bots/:id/config" element={
+            <ProtectedRoute>
+              <BotConfigPage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/my-bots" element={
+            <ProtectedRoute>
+              <MyBotsPage />
+            </ProtectedRoute>
+          } />
+
+          {/* 404 - Not Found */}
+          <Route path="*" element={
+            <Layout>
+              <NotFoundPage />
+            </Layout>
+          } />
+        </Routes>
+      </AuthProvider>
+    </Router>
+  );
+}
 
 export default App;
