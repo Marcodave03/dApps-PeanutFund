@@ -1,3 +1,20 @@
+# Welcome to ICP Ninja!
+
+ICP Ninja is a web-based integrated development environment (IDE) for the Internet Computer. It allows you to write code and deploy applications directly from your web browser in a temporary, sandbox-like environment.
+
+For users who may already be familiar with the Internet Computer or who would rather use more **advanced tooling** such as command-line development tools, please refer to the [ICP developer documentation](https://internetcomputer.org/docs/current/developer-docs/getting-started/overview-of-icp) to learn more.
+
+First, read this example's `README.md` file to learn more about the project's structure and features. It will provide an overview of what the application does and what ICP features it uses.
+
+Then, you can deploy this example directly to the mainnet for free by clicking "Deploy" in the upper right corner.
+
+To **download** or **reset** the project files, click the menu option next to the deploy button.
+
+To make adjustments to this project, you can edit any file that is unlocked. Then, redeploy your application to view your changes.
+
+To edit files that are immutable in ICP Ninja, you can download the project's files using the "Download files" option, then follow the instructions in the `BUILD.md` file to continue building locally.
+
+
 # LLM Chatbot
 
 ![LLM Chatbot](https://icp.ninja/examples/_attachments/llm_chatbot.png)
@@ -36,3 +53,11 @@ ollama run llama3.1:8b
 The above command will download an 8B parameter model, which is around 4GiB. Once the command executes and the model is loaded, you can terminate it. You won't need to do this step again.
 
 ### 3. Open the `BUILD.md` file for further instructions.
+
+
+
+backend ERD Reference
+
+https://drive.google.com/file/d/1UHr71IU-xk06QR_G5WnPdXWR-ZKRW3-0/view
+
+untuk sementara user hanya punya 1 bot 

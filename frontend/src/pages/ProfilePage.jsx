@@ -12,59 +12,74 @@ import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
 import { Switch } from "../components/ui/switch";
 import { Skeleton } from "../components/ui/skeleton";
-
-
-
+import { useAuth } from "../contexts/AuthContext";
+import { updateUsername } from "../lib/api";
+import { useTheme } from '../contexts/ThemeContext';
 
 function ProfilePage() {
+  const { user, loading: authLoading, updateUserContext } = useAuth(); // Assuming updateUserContext exists to update auth state
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // Email is for display, not updated by this API call
 
-  const [isPublic, setIsPublic] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [isPublic, setIsPublic] = useState(false); // Example, not handled by current API integration
+  const { colors } = useTheme(); // Example, not handled by current API integration
 
-//   const USER_ID = "USER_ID_EXAMPLE";
   useEffect(() => {
-    setIsLoading(true);
-    // Example fetch from your backend:
-    // fetch(`http://localhost:3000/users/${USER_ID}`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setName(data.name || "");
-    //     setEmail(data.email || "");
-    //     setIsPublic(data.isPublic || false);
-    //     setDarkMode(data.darkMode || false);
-    //   })
-    //   .catch((err) => console.error(err))
-    //   .finally(() => setIsLoading(false));
-  }, []);
+    if (!authLoading && user) {
+      setName(user.username || "");
+      // Populate email from user context or a default based on address
+      setEmail(user.email || (user.address ? `${user.address.substring(0,10).toLowerCase()}@example.com` : ""));
+      setIsLoading(false);
+    } else if (!authLoading && !user) {
+      // Handle case where user is not logged in (e.g., redirect or show message)
+      setIsLoading(false);
+      // Consider redirecting: navigate('/login');
+    }
+  }, [user, authLoading]);
 
-  const handleSaveProfile = () => {
-    // const payload = { name, email, isPublic, darkMode };
-    // fetch(`http://localhost:3000/updateUser/${USER_ID}`, {
-    //   method: "PUT",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(payload),
-    // })
-    //   .then((res) => res.json())
-    //   .then((updated) => {
-    //     alert("Profile updated!");
-    //   })
-    //   .catch((err) => console.error(err));
+  const handleSaveProfile = async () => {
+    if (!user || !user.address) {
+      alert("User not found. Please log in again.");
+      return;
+    }
+    if (!name.trim()) {
+      alert("Name cannot be empty.");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const updatedUser = await updateUsername(user.address, name);
+      alert("Username updated successfully!");
+      // Optionally, update the user context if the backend returns the full updated user object
+      // and if your useAuth hook has a way to update the user state, e.g.:
+      if (updateUserContext && updatedUser) {
+         // Assuming backend returns { UserId, Username, ... } or similar
+         // And your AuthContext user object has a 'username' field
+        updateUserContext({ ...user, username: updatedUser.Username || name });
+      }
+      setName(updatedUser.Username || name); // Update local state with confirmed new name
+    } catch (error) {
+      console.error("Failed to update username:", error);
+      alert(`Failed to update username: ${error.message}`);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#1C223F] text-slate-200 p-6 space-y-6">
+    <div className={`container mx-auto px-4 py-8 space-y-6 ${colors.bg} ${colors.text} `}>
       <header>
-        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className={`text-3xl font-bold tracking-tight ${colors.text} `}>Settings</h1>
+        <p className={`text-sm  ${colors.text} `}>
           Manage your account and preferences
         </p>
       </header>
 
-      <Card className="bg-[#242A4D] text-slate-200">
+      <Card className={`${colors.bgCard} ${colors.text} ${colors.border}`}>
         <CardHeader>
           <CardTitle>Profile</CardTitle>
           <CardDescription>Update your personal information</CardDescription>
@@ -106,15 +121,15 @@ function ProfilePage() {
         <CardFooter>
           <Button
             onClick={handleSaveProfile}
-            disabled={isLoading}
-            className="bg-violet-600 hover:bg-violet-700"
+            disabled={isLoading || isSaving} // Updated disabled state
+            className="bg-green-700 hover:bg-violet-900 text-white"
           >
             Save Profile
           </Button>
         </CardFooter>
       </Card>
 
-      <Card className="bg-[#242A4D] text-slate-200">
+      <Card className={`${colors.bgCard} ${colors.text} ${colors.border}`}>
         <CardHeader>
           <CardTitle>Preferences</CardTitle>
           <CardDescription>Control your privacy and appearance</CardDescription>
@@ -150,9 +165,9 @@ function ProfilePage() {
         </CardContent>
         <CardFooter>
           <Button
-            onClick={handleSaveProfile}
-            disabled={isLoading}
-            className="bg-violet-600 hover:bg-violet-700"
+            onClick={handleSaveProfile} // TODO: Should have its own handler for preferences
+            disabled={isLoading || isSaving} // Aligning disabled state
+            className="bg-green-700 hover:bg-violet-900 text-white"
           >
             Save Settings
           </Button>
