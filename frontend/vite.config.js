@@ -2,15 +2,10 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { fileURLToPath, URL } from 'url';
 import environment from 'vite-plugin-environment';
-import path from 'path';
 
 export default defineConfig({
   base: './',
-  plugins: [
-    react(),
-    environment('all', { prefix: 'CANISTER_' }),
-    environment('all', { prefix: 'DFX_' })
-  ],
+  plugins: [react(), environment('all', { prefix: 'CANISTER_' }), environment('all', { prefix: 'DFX_' })],
   envDir: '../',
   define: {
     'process.env': process.env
@@ -23,11 +18,13 @@ export default defineConfig({
     }
   },
   resolve: {
-    alias: {
-      'declarations': fileURLToPath(new URL('../src/declarations', import.meta.url)),
-      '@': path.resolve(__dirname, 'src'),
-      'path': 'path-browserify'  // ✅ Added path alias for browser compatibility
-    }
+    alias: [
+      {
+        find: 'declarations',
+        replacement: fileURLToPath(new URL('../src/declarations', import.meta.url))
+      },
+      
+    ]
   },
   server: {
     proxy: {
