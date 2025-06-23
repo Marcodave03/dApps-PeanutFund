@@ -12,13 +12,7 @@
         "src/peanut_fund_project_frontend/dist"
       ],
       "type": "assets",
-      "workspace": "peanut_fund_project_frontend"
-    }
-  },
-  "defaults": {
-    "build": {
-      "args": "",
-      "packtool": ""
+      "build": ""
     }
   },
   "output_env_file": ".env",
