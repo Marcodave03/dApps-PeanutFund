@@ -4,25 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { ArrowPathIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { Portfolio, Bot, Activity } from '../lib/types';
-import { Actor, HttpAgent } from "@dfinity/agent";
-
-import { idlFactory } from '../../../declarations/peanut_fund_project_backend';
-
-
-const host = window.location.origin;
-const agent = new HttpAgent({ host });
-
-if (host.includes("localhost")) {
-  agent.fetchRootKey().catch(err => {
-    console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
-    console.error(err);
-  });
-}
-
-export const backend_actor = Actor.createActor(idlFactory, {
-  agent,
-  canisterId: "uxrrr-q7777-77774-qaaaq-cai",
-});
+import { backend_actor } from '../lib/agent';
 
 
 interface DashboardPageProps {}
