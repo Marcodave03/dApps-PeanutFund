@@ -1,35 +1,20 @@
 {
   "canisters": {
-    "backend": {
-      "dependencies": ["llm"],
-      "main": "backend/app.mo",
-      "type": "motoko",
-      "args": "--enhanced-orthogonal-persistence"
+    "peanut_fund_project_backend": {
+      "main": "src/peanut_fund_project_backend/main.mo",
+      "type": "motoko"
     },
-    "frontend": {
-      "dependencies": ["backend"],
-      "frontend": {
-        "entrypoint": "frontend/index.html"
-      },
-      "source": ["frontend/dist"],
-      "type": "assets"
-    },
-    "llm": {
-      "candid": "https://github.com/dfinity/llm/releases/latest/download/llm-canister-ollama.did",
-      "type": "custom",
-      "specified_id": "w36hm-eqaaa-aaaal-qr76a-cai",
-      "remote": {
-        "id": {
-          "ic": "w36hm-eqaaa-aaaal-qr76a-cai"
-        }
-      },
-      "wasm": "https://github.com/dfinity/llm/releases/latest/download/llm-canister-ollama.wasm"
+    "peanut_fund_project_frontend": {
+      "dependencies": [
+        "peanut_fund_project_backend"
+      ],
+      "source": [
+        "src/peanut_fund_project_frontend/dist"
+      ],
+      "type": "assets",
+      "build": ""
     }
   },
   "output_env_file": ".env",
-  "defaults": {
-    "build": {
-      "packtool": "mops sources"
-    }
-  }
+  "version": 1
 }

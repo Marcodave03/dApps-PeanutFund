@@ -1,63 +1,59 @@
-# Welcome to ICP Ninja!
+# `peanut_fund_project`
 
-ICP Ninja is a web-based integrated development environment (IDE) for the Internet Computer. It allows you to write code and deploy applications directly from your web browser in a temporary, sandbox-like environment.
+Welcome to your new `peanut_fund_project` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
 
-For users who may already be familiar with the Internet Computer or who would rather use more **advanced tooling** such as command-line development tools, please refer to the [ICP developer documentation](https://internetcomputer.org/docs/current/developer-docs/getting-started/overview-of-icp) to learn more.
+To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
 
-First, read this example's `README.md` file to learn more about the project's structure and features. It will provide an overview of what the application does and what ICP features it uses.
+To learn more before you start working with `peanut_fund_project`, see the following documentation available online:
 
-Then, you can deploy this example directly to the mainnet for free by clicking "Deploy" in the upper right corner.
+- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
+- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
+- [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
+- [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
 
-To **download** or **reset** the project files, click the menu option next to the deploy button.
+If you want to start working on your project right away, you might want to try the following commands:
 
-To make adjustments to this project, you can edit any file that is unlocked. Then, redeploy your application to view your changes.
-
-To edit files that are immutable in ICP Ninja, you can download the project's files using the "Download files" option, then follow the instructions in the `BUILD.md` file to continue building locally.
-
-
-# LLM Chatbot
-
-![LLM Chatbot](https://icp.ninja/examples/_attachments/llm_chatbot.png)
-
-The LLM Chatbot example demonstrates how an ICP smart contract can be used to interact with a large language model (LLM) to generate text. The user can input a prompt, and the smart contract will use the LLM to generate a response.
-The response is then returned to the user, and the user can submit some follow-up prompts to continue the conversation.
-
-This application's logic is written in [Motoko](https://internetcomputer.org/docs/current/motoko/main/getting-started/motoko-introduction), a programming language designed specifically for developing canisters on ICP.
-
-### Project structure
-
-The `/backend` folder contains the Motoko canister, `app.mo`. The `/frontend` folder contains web assets for the application's user interface. The user interface is written using the React framework. Edit the `mops.toml` file to add [Motoko dependencies](https://mops.one/) to the project.
-
-## Continue building locally
-
-To migrate your ICP Ninja project off of the web browser and develop it locally, follow these steps.
-
-### 1. Download your project from ICP Ninja using the 'Download files' button.
-
-### 2. Setting up Ollama
-
-To be able to test the agent locally, you'll need a server for processing the agent's prompts. For that, we'll use `ollama`, which is a tool that can download and serve LLMs.
-See the documentation on the [Ollama website](https://ollama.com/) to install it. Once it's installed, run:
-
-```
-ollama serve
-# Expected to start listening on port 11434
+```bash
+cd peanut_fund_project/
+dfx help
+dfx canister --help
 ```
 
-The above command will start the Ollama server, so that it can process requests by the agent. Additionally, and in a separate window, run the following command to download the LLM that will be used by the agent:
+## Running the project locally
 
+If you want to test your project locally, you can use the following commands:
+
+```bash
+# Starts the replica, running in the background
+dfx start --background
+
+# Deploys your canisters to the replica and generates your candid interface
+dfx deploy
 ```
-ollama run llama3.1:8b
+
+Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
+
+If you have made changes to your backend canister, you can generate a new candid interface with
+
+```bash
+npm run generate
 ```
 
-The above command will download an 8B parameter model, which is around 4GiB. Once the command executes and the model is loaded, you can terminate it. You won't need to do this step again.
+at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
 
-### 3. Open the `BUILD.md` file for further instructions.
+If you are making frontend changes, you can start a development server with
 
+```bash
+npm start
+```
 
+Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
 
-backend ERD Reference
+### Note on frontend environment variables
 
-https://drive.google.com/file/d/1UHr71IU-xk06QR_G5WnPdXWR-ZKRW3-0/view
+If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
 
-untuk sementara user hanya punya 1 bot 
+- set`DFX_NETWORK` to `ic` if you are using Webpack
+- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
+  - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
+- Write your own `createActor` constructor
