@@ -13,6 +13,26 @@
       ],
       "type": "assets",
       "build": "npm --prefix src/peanut_fund_project_frontend run build"
+    },
+    "bot_config": {
+      "main": "src/peanut_fund_project_backend/BotConfig.mo",
+      "type": "motoko"
+    },
+    "bot_execution": {
+      "main": "src/peanut_fund_project_backend/BotExecution.mo",
+      "type": "motoko"
+    },
+    "trade_recommendation": {
+      "main": "src/peanut_fund_project_backend/TradeRecommendation.mo",
+      "type": "motoko"
+    },
+    "transaction_history": {
+      "main": "src/peanut_fund_project_backend/TransactionHistory.mo",
+      "type": "motoko"
+    },
+    "auth": {
+      "main": "src/peanut_fund_project_backend/Auth.mo",
+      "type": "motoko"
     }
   },
   "output_env_file": ".env",
